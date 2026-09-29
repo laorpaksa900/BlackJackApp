@@ -29,10 +29,15 @@
         (calculate-bust-cards hand (rest first-row))))))
         ; Als de kaart geen bust veroorzaakt: controleer alleen de overige kaarten.
 
+(defn calculate-bust-count [bust-cards]
+  (* (count bust-cards) 4))
+
 (let [deck (cards/shuffle-deck (cards/create-deck))
-      [current-hand] (cards/draw-hand deck)]
+      [current-hand] (cards/draw-hand deck)
+      busted-cards (calculate-bust-cards current-hand (first cards/card-numbers))]
 
 
   (println "Hand:" current-hand)
   (println "Waarde:" (hand-value current-hand))
-  (println "Bust kaarten:" (calculate-bust-cards current-hand (first cards/card-numbers))))
+  (println "Bust kaarten:" (calculate-bust-cards current-hand (first cards/card-numbers)))
+  (println "Aantal bust kaarten:" (calculate-bust-count busted-cards)))
