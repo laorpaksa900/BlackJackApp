@@ -17,31 +17,36 @@
 
 (defn calculate-bust-cards [hand first-row]
   ;maakt een functie aan die de hand mee krijgt en een vector aan kaarten
-  (if (empty? first-row)
-    []
-    ;zorgt ervoor dat als de vector leeg is de functie stopt en een lege vector terug geeft.
-    (let [card (first first-row)]
-      ;slaat tijdelijk de eerste kaart van de vector op in een variable.
-      (if (> (hand-value (conj (vec hand) card)) 21)
-        ; maakt van de hand een vector en voegt de card toe aan de hand. vervolgens gaat het door de hand-value functie heen en kijkt of het groter dan 21 is.
-        (conj (calculate-bust-cards hand (rest first-row)) card)
-        ; Als de kaart een bust veroorzaakt: controleer recursief de overige kaarten en voeg deze kaart toe aan
-        (calculate-bust-cards hand (rest first-row))))))
-        ; Als de kaart geen bust veroorzaakt: controleer alleen de overige kaarten.
+  (loop [remaining-row first-row
+         bust-cards []]
+    ;maakt een loop met de kaarten en een lege bust-cards vector, zodat recur met nieuwe waarden terug naar dit punt kan gaan.
+    (if (empty? remaining-row)
+      bust-cards
+      ;zorgt ervoor dat als de vector leeg is de functie stopt en de bust-cards vector terug geeft.
+      (let [card (first remaining-row)]
+        ;slaat tijdelijk de eerste kaart van de vector op in een variable.
+        (if (> (hand-value (conj (vec hand) card)) 21)
+          ;maakt van de hand een vector en voegt de card toe aan de hand. vervolgens gaat het door de hand-value functie heen en kijkt of het groter dan 21 is.
+          (recur (rest remaining-row) (conj bust-cards card))
+          ;als de kaart een bust veroorzaakt: voeg de kaart toe aan bust-cards en controleer de overige kaarten.
+          (recur (rest remaining-row) bust-cards)))))
+          ;als de kaart geen bust veroorzaakt: controleer alleen de overige kaarten.
 
 (defn count-used-bust-cards [hand bust-cards]
   ;maakt een functie aan die de hand mee krijgt en de bust-cards vector
-  (if (empty? hand)
-    0
-    ;zorgt ervoor dat als de hand leeg is de functie stopt en 0 terug geeft.
-    (let [card (first hand)]
-      ;slaat tijdelijk de eerste kaart van de hand op in een variable.
-      (if (contains? (set bust-cards) card)
-        ;veranderd de bust-cards vector in een set en kijkt of de kaart in de set zit.
-        (+ 1 (count-used-bust-cards (rest hand) bust-cards))
-        ;als de kaart in de set zit: tel 1 op bij het resultaat.
-        (count-used-bust-cards (rest hand) bust-cards)))))
-        ;als de kaart niet in de set zit: ga verder met de rest van de hand.
+  (loop [remaining-hand hand
+         counter 0]
+    ;maakt een loop met de hand en een counter die bij 0 begint, zodat recur met nieuwe waarden terug naar dit punt kan gaan.    (if (empty? remaining-hand)
+      counter
+      ;zorgt ervoor dat als de hand leeg is de functie stopt en de counter terug geeft.
+      (let [card (first remaining-hand)]
+        ;slaat tijdelijk de eerste kaart van de hand op in een variable.
+        (if (contains? (set bust-cards) card)
+          ;veranderd de bust-cards vector in een set en kijkt of de kaart in de set zit.
+          (recur (rest remaining-hand) (inc counter))
+          ;als de kaart in de set zit: ga verder met de rest van de hand en tel 1 op bij de counter.
+          (recur (rest remaining-hand) counter)))))
+          ;als de kaart niet in de set zit: ga verder met de rest van de hand zonder de counter te verhogen.
 
 (defn calculate-bust-count [hand bust-cards]
   (- (* (count bust-cards) 4) (count-used-bust-cards hand bust-cards)))
@@ -56,5 +61,5 @@
   (println "Bust kaarten:" (calculate-bust-cards current-hand (first cards/card-numbers)))
   (println "Aantal bust kaarten:" (calculate-bust-count current-hand busted-cards))
   (println "Deck na draw:" deck-after-draw)
-  (println "kans op busten:" (float (*(/ (calculate-bust-count current-hand busted-cards) (count deck-after-draw))100))))
+  (println "kans op busten:" (int (*(/ (calculate-bust-count current-hand busted-cards) (count deck-after-draw))100))))
 ;final calculation to calculate the chance of busting by dividing the amount of bust cards left in the deck by the amount of cards left in the deck and multiplying it by 100 to get a percentage.
