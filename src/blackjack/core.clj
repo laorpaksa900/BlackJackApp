@@ -55,4 +55,6 @@
   (println "Waarde:" (hand-value current-hand))
   (println "Bust kaarten:" (calculate-bust-cards current-hand (first cards/card-numbers)))
   (println "Aantal bust kaarten:" (calculate-bust-count current-hand busted-cards))
-  (println "Deck na draw:" deck-after-draw))
+  (println "Deck na draw:" deck-after-draw)
+  (println "kans op busten:" (float (*(/ (calculate-bust-count current-hand busted-cards) (count deck-after-draw))100))))
+;final calculation to calculate the chance of busting by dividing the amount of bust cards left in the deck by the amount of cards left in the deck and multiplying it by 100 to get a percentage.
