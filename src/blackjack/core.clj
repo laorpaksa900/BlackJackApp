@@ -29,7 +29,7 @@
           ;maakt van de hand een vector en voegt de card toe aan de hand. vervolgens gaat het door de hand-value functie heen en kijkt of het groter dan 21 is.
           (recur (rest remaining-row) (conj bust-cards card))
           ;als de kaart een bust veroorzaakt: voeg de kaart toe aan bust-cards en controleer de overige kaarten.
-          (recur (rest remaining-row) bust-cards)))))
+          (recur (rest remaining-row) bust-cards))))))
           ;als de kaart geen bust veroorzaakt: controleer alleen de overige kaarten.
 
 (defn count-used-bust-cards [hand bust-cards]
@@ -50,6 +50,8 @@
 
 (defn calculate-bust-count [hand bust-cards]
   (- (* (count bust-cards) 4) (count-used-bust-cards hand bust-cards)))
+;vermedigvuldigt het aantal bust-cards met 4 (omdat er 4 van elke kaart in het deck zitten) en trekt daar het aantal kaarten dat al in de hand zit vanaf als de hand bust-kaarten bezit.
+
 
 (let [deck (cards/shuffle-deck (cards/create-deck))
       [current-hand deck-after-draw] (cards/draw-hand deck)
