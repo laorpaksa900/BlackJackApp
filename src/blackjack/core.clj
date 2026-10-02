@@ -7,13 +7,18 @@
     "K" 10
     "A" 1
     card))
-
+;veranderd de kaarten in hun waarde, zodat de kaarten in de hand opgeteld kunnen worden.
 (defn hand-value [hand]
+  ;maakt een functie aan die de totale waarde van de hand berekent.
   (let [value (reduce + (map cards-value hand))]
+    ;zet elke kaart om naar zijn waarde met cards-value en telt daarna alle waardes bij elkaar op.
     (if (and (contains? (set hand) "A")
              (<= value 11))
+      ;controleert of er een aas in de hand zit en of de aas als 11 gebruikt kan worden zonder boven de 21 te komen.
       (+ value 10)
+      ;als de aas als 11 gebruikt kan worden, wordt er 10 bij de waarde opgeteld omdat de aas eerst als 1 is berekend.
       value)))
+;als de aas niet als 11 gebruikt kan worden, wordt de normale waarde van de hand teruggegeven.
 
 (defn calculate-bust-cards [hand first-row]
   ;maakt een functie aan die de hand mee krijgt en een vector aan kaarten
