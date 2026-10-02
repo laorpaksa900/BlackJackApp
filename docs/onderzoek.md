@@ -200,7 +200,7 @@ Bron: [Clojure – Destructuring](https://clojure.org/guides/destructuring)
 ---
 
 ## 9. Bronnen
-
+- [onderzoek support](https://chatgpt.com/share/6abf9637-faa8-83eb-9b42-0052a91d3dc2)
 - [Clojure – Rationale](https://clojure.org/about/rationale)
 - [Clojure – Functional Programming](https://clojure.org/about/functional_programming)
 - [Clojure – Higher Order Functions](https://clojure.org/guides/higher_order_functions)
